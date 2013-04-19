@@ -1,0 +1,4 @@
+Documentation set was installed to Xcode!
+
+Path: /Users/kheam/Library/Developer/Shared/Documentation/DocSets/com.marionegro.alert-blocks.docset
+Time: 2013-04-19 01:25:15 +0000

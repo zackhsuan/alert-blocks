@@ -46,6 +46,11 @@ Installation instructions
 		                                message:(NSString *)message
 		                                handler:(UIAlertViewHandler)handler;
 
+ 		// Utility selector to show a dialog with a title, message and two buttons along with a text field, plain style.
+		+ (void)showTextInputDialogWithTitle:(NSString *)title 
+					     message:(NSString *)mssage 
+					     handler:(TextInputHandler)handler;
+
 5. You can see some examples in `ViewController` class.
 
 Documentation
