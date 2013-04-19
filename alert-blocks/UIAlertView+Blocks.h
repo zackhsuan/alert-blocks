@@ -31,6 +31,16 @@
  */
 typedef void(^UIAlertViewHandler)(UIAlertView *alertView, NSInteger buttonIndex);
 
+
+/*
+ *  Completion handler for text input when there is a need.
+ *
+ * @param alertView The alert view being shown.
+ * @param buttonIndex The index of the button tapped.
+ * @param text The text which user inputs
+ */
+typedef void(^TextInputHandler) (UIAlertView *alertView, NSInteger buttonIndex, NSString *text);
+
 /**
  * Category of `UIAlertView` that offers a completion handler to listen to interaction. This avoids the need of the implementation of the delegate pattern.
  *
@@ -89,5 +99,17 @@ typedef void(^UIAlertViewHandler)(UIAlertView *alertView, NSInteger buttonIndex)
 + (void)showConfirmationDialogWithTitle:(NSString *)title
                                 message:(NSString *)message
                                 handler:(UIAlertViewHandler)handler;
+
+/**
+ * Utility selector to show a dialog with a title, message and two buttons along with a text field, plain style.
+ *
+ * @param title The title of the alert.
+ * @param message The message to show in the alert.
+ * @param handler The handler that will be invoked in user interaction.
+ */
+
++ (void) showTextInputDialogWithTitle: (NSString *) title
+                              message:(NSString *) mssage
+                              handler:(TextInputHandler) handler;
 
 @end

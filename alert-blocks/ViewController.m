@@ -95,4 +95,15 @@
                                          }];
 }
 
+- (IBAction)inputTextDialogClicked:(UIButton *)sender {
+    
+    [UIAlertView showTextInputDialogWithTitle:@"Input dialog" message:@"Please input a message to go" handler:^(UIAlertView *alertView, NSInteger buttonIndex, NSString *text) {
+        if (buttonIndex == 0) {
+            NSLog(@"You have cancled input");
+        }else{
+            [sender setTitle:[NSString stringWithFormat:@"Your input: %@", text] forState:UIControlStateNormal];
+        }
+    }];
+}
+
 @end

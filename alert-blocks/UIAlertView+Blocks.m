@@ -28,6 +28,7 @@
  * Runtime association key.
  */
 static NSString *kHandlerAssociatedKey = @"kHandlerAssociatedKey";
+static NSString *kTextHandlerAssociatedKey = @"kTextHandlerAssociatedKey";
 
 @implementation UIAlertView (Blocks)
 
@@ -44,6 +45,13 @@ static NSString *kHandlerAssociatedKey = @"kHandlerAssociatedKey";
     [self show];
 }
 
+-(void) showWithTextHandler:(TextInputHandler) handler{
+    objc_setAssociatedObject(self, (__bridge const void *)(kTextHandlerAssociatedKey), handler, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    [self setDelegate:self];
+    [self show];
+}
+
 #pragma mark - UIAlertViewDelegate
 
 /*
@@ -51,11 +59,19 @@ static NSString *kHandlerAssociatedKey = @"kHandlerAssociatedKey";
  */
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    UIAlertViewHandler completionHandler = objc_getAssociatedObject(self, (__bridge const void *)(kHandlerAssociatedKey));
-    
-    if (completionHandler != nil) {
+    if (alertView.alertViewStyle != UIAlertViewStylePlainTextInput) {
+        UIAlertViewHandler completionHandler = objc_getAssociatedObject(self, (__bridge const void *)(kHandlerAssociatedKey));
         
-        completionHandler(alertView, buttonIndex);
+        if (completionHandler != nil) {
+            
+            completionHandler(alertView, buttonIndex);
+        }
+    }else{
+        TextInputHandler completeHandler = objc_getAssociatedObject(self, (__bridge const void *)(kTextHandlerAssociatedKey));
+        
+        if (completeHandler != nil) {
+            completeHandler(alertView, buttonIndex, [alertView textFieldAtIndex:0].text);
+        }
     }
 }
 
@@ -121,6 +137,19 @@ static NSString *kHandlerAssociatedKey = @"kHandlerAssociatedKey";
                                           otherButtonTitles:@"Yes", nil];
     
     [alert showWithHandler:handler];
+}
+
+/*
+ * Utility selector to show a dialog with a title, message and two buttons along with a text field, plain style.
+ */
++ (void)showTextInputDialogWithTitle:(NSString *)title message:(NSString *)mssage handler:(TextInputHandler)handler{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:mssage
+                                                   delegate:nil
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes", nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert showWithTextHandler:handler];
 }
 
 @end
